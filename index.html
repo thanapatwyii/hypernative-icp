@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#161615">
+<title>Hypernative ICP study</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --color-background-primary:#ffffff;--color-background-secondary:#f4f3ee;--color-background-tertiary:#eceae1;
+  --color-background-info:#E6F1FB;--color-background-success:#E1F5EE;--color-background-warning:#FAEEDA;--color-background-danger:#FCEBEB;
+  --color-text-primary:#1c1c1a;--color-text-secondary:#5F5E5A;--color-text-tertiary:#888780;
+  --color-text-info:#185FA5;--color-text-success:#0F6E56;--color-text-warning:#854F0B;--color-text-danger:#A32D2D;
+  --color-border-tertiary:rgba(0,0,0,0.12);--color-border-secondary:rgba(0,0,0,0.22);--color-border-primary:rgba(0,0,0,0.34);--color-border-info:#378ADD;
+  --border-radius-md:8px;--border-radius-lg:12px;--border-radius-xl:16px;
+  --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-serif:ui-serif,Georgia,serif;--font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --color-background-primary:#212120;--color-background-secondary:#2b2b28;--color-background-tertiary:#161615;
+  --color-background-info:#0C447C;--color-background-success:#085041;--color-background-warning:#633806;--color-background-danger:#791F1F;
+  --color-text-primary:#f1efe8;--color-text-secondary:#B4B2A9;--color-text-tertiary:#888780;
+  --color-text-info:#85B7EB;--color-text-success:#5DCAA5;--color-text-warning:#FAC775;--color-text-danger:#F09595;
+  --color-border-tertiary:rgba(255,255,255,0.13);--color-border-secondary:rgba(255,255,255,0.24);--color-border-primary:rgba(255,255,255,0.36);
+}}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--color-background-tertiary);color:var(--color-text-primary);font-family:var(--font-sans);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.page{max-width:840px;margin:0 auto;padding:30px 18px 72px;}
+.page-head h1{font-size:24px;font-weight:500;margin:0 0 6px;letter-spacing:-0.01em;}
+.page-head p{color:var(--color-text-secondary);margin:0 0 22px;font-size:15px;max-width:64ch;}
+.page-head a{color:var(--color-text-info);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="page-head">
+    <h1>Hypernative ICP study</h1>
+    <p>15 target segments across 5 verticals, with APAC accounts to target. Browse by vertical, or flip a shuffled deck in Card mode. Built from the Hypernative ICP knowledge base and BDR playbook.</p>
+  </header>
+
+  <style>
+  .icp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  .icp-app{font-family:var(--font-sans);}
+  .icp-modes{display:inline-flex;gap:4px;padding:4px;background:var(--color-background-secondary);border-radius:999px;margin-bottom:16px;}
+  .icp-mode{font:inherit;font-size:13px;padding:7px 16px;border-radius:999px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .icp-mode[aria-pressed="true"]{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500;box-shadow:0 0 0 0.5px var(--color-border-tertiary);}
+  .icp-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .icp-pill{font:inherit;font-size:13px;padding:6px 13px;border-radius:999px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .icp-pill:hover{background:var(--color-background-secondary);}
+  .icp-pill[aria-pressed="true"]{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500;}
+  .icp-dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .icp-pill .icp-ct{font-size:11px;color:var(--color-text-tertiary);}
+  .icp-nav,.icp-deck{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .icp-deck{flex-wrap:wrap;}
+  .icp-deck .sp{flex:1;}
+  .icp-arrow{font:inherit;width:34px;height:34px;flex:none;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:18px;}
+  .icp-arrow:hover{background:var(--color-background-secondary);}
+  .icp-chips{display:flex;gap:8px;overflow-x:auto;flex:1;padding:2px 2px 8px;scrollbar-width:thin;}
+  .icp-chip{white-space:nowrap;font:inherit;font-size:13px;padding:7px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .icp-chip:hover{border-color:var(--color-border-secondary);}
+  .icp-chip[aria-pressed="true"]{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500;}
+  .icp-pos{font-size:12px;color:var(--color-text-tertiary);flex:none;min-width:46px;text-align:center;}
+  .icp-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px 22px;}
+  .icp-chead{display:flex;gap:15px;align-items:flex-start;}
+  .icp-avatar{width:54px;height:54px;border-radius:15px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;}
+  .icp-htext{flex:1;min-width:0;}
+  .icp-name{font-size:19px;font-weight:500;margin:0;line-height:1.3;}
+  .icp-tagline{color:var(--color-text-secondary);font-size:14px;margin:5px 0 0;}
+  .icp-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;}
+  .icp-badge{font-size:12px;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;font-weight:500;}
+  .icp-seg-badge{font-size:12px;padding:3px 10px;border-radius:999px;border:0.5px solid currentColor;display:inline-flex;align-items:center;gap:6px;}
+  .icp-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0 4px;}
+  .icp-metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px 13px;}
+  .icp-metric .lbl{font-size:12px;color:var(--color-text-secondary);margin:0;}
+  .icp-metric .val{font-size:17px;font-weight:500;margin:3px 0 0;line-height:1.25;}
+  .icp-note{background:var(--color-background-secondary);border-left:3px solid var(--color-border-primary);border-radius:0;padding:10px 13px;font-size:13px;margin:16px 0 0;}
+  .icp-section{margin-top:18px;}
+  .icp-section h4{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:0 0 9px;display:flex;align-items:center;gap:7px;}
+  .icp-pains{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px;}
+  .icp-pain{display:flex;gap:10px;}
+  .icp-pain .pi{font-size:17px;margin-top:1px;flex:none;}
+  .icp-pain .pp{font-weight:500;font-size:14px;margin:0;}
+  .icp-pain .ps{color:var(--color-text-secondary);font-size:13px;margin:2px 0 0;}
+  .icp-tags{display:inline-flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+  .icp-tag{font-size:11px;padding:1px 8px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);white-space:nowrap;}
+  .icp-chiprow{display:flex;gap:6px;flex-wrap:wrap;}
+  .icp-mini{font-size:12px;padding:3px 9px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);display:inline-flex;align-items:center;gap:6px;}
+  .icp-mini.hack{color:var(--color-text-danger);}
+  .icp-mini .rg{font-size:10px;padding:1px 5px;border-radius:4px;background:var(--color-background-primary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);}
+  .icp-apac .icp-mini{border:0.5px solid var(--color-border-tertiary);background:transparent;}
+  .icp-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+  .icp-foot{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;}
+  .icp-btn{font:inherit;font-size:13px;padding:9px 15px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .icp-btn:hover{background:var(--color-background-secondary);}
+  .icp-btn.primary{border-color:var(--color-border-info);color:var(--color-text-info);}
+  .icp-reveal{margin:22px 0 6px;display:flex;justify-content:center;}
+  .icp-reveal .icp-btn{padding:11px 22px;font-size:14px;}
+  .icp-front-hint{text-align:center;color:var(--color-text-tertiary);font-size:13px;margin-top:16px;}
+  </style>
+
+  <div class="icp-app">
+    <h2 class="icp-sr">Interactive study of Hypernative's 15 ideal-customer segments with APAC target accounts. Browse mode filters by vertical; Card mode flips through a shuffled flashcard deck. Each card shows pain points, fitting products, APAC examples, buyers, deal size and trigger events.</h2>
+    <div class="icp-modes" id="icpModes" role="group" aria-label="View mode"></div>
+    <div class="icp-filter" id="icpFilter" role="group" aria-label="Filter by vertical"></div>
+    <div class="icp-nav" id="icpBrowseNav">
+      <button class="icp-arrow" id="icpPrev" aria-label="Previous segment"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+      <div class="icp-chips" id="icpChips" role="tablist" aria-label="Target segments"></div>
+      <span class="icp-pos" id="icpPos"></span>
+      <button class="icp-arrow" id="icpNext" aria-label="Next segment"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+    </div>
+    <div class="icp-deck" id="icpDeckBar" style="display:none">
+      <button class="icp-btn" id="icpShuffle"><i class="ti ti-arrows-shuffle" aria-hidden="true"></i> Shuffle deck</button>
+      <span class="sp"></span>
+      <button class="icp-arrow" id="icpDPrev" aria-label="Previous card"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+      <span class="icp-pos" id="icpDPos"></span>
+      <button class="icp-arrow" id="icpDNext" aria-label="Next card"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+    </div>
+    <div class="icp-card" id="icpCard" aria-live="polite"></div>
+  </div>
+
+  <script>
+  (function(){
+    var SEG={
+      defi:{name:"DeFi & Web3",color:"#7F77DD"},
+      cefi:{name:"CeFi",color:"#378ADD"},
+      inst:{name:"Institutional",color:"#1D9E75"},
+      infra:{name:"Infrastructure",color:"#E0951F"},
+      wallets:{name:"Wallets",color:"#D4537E"}
+    };
+    var TIER={
+      top:{label:"Top priority",icon:"ti-flame",bg:"--color-background-warning",fg:"--color-text-warning"},
+      core:{label:"Core ICP",icon:"ti-target-arrow",bg:"--color-background-success",fg:"--color-text-success"},
+      emerging:{label:"Emerging",icon:"ti-trending-up",bg:"--color-background-info",fg:"--color-text-info"},
+      selective:{label:"Selective",icon:"ti-alert-triangle",bg:"--color-background-secondary",fg:"--color-text-secondary"}
+    };
+    var PROD={OM:"On-chain Monitoring & Automated Response",TG:"Transaction Guard",AS:"Address Screener",WP:"Wallet Protect",PS:"Professional Services"};
+    var APAC={
+      banks:["DBS / DBS Digital Exchange — SG","Standard Chartered (Zodia) — SG/HK","HSBC Orion — HK","ANZ (A$DC) — AU","MUFG Progmat — JP","SCB 10X / KBank — TH"],
+      funds:["QCP Capital — SG","Amber Group — SG","Matrixport — SG","Hashed — KR","Animoca Brands — HK","Kronos Research — TW"],
+      cex:["Upbit / Bithumb — KR","Bitkub — TH","Coinhako — SG","Independent Reserve — AU","WazirX / CoinDCX — IN","bitFlyer / Coincheck — JP","Indodax — ID"],
+      defi:["Kyber Network — VN","Pendle — SG","WOO / Orderly — TW","Tranchess — SG","KLAYswap (Ozys) — KR"],
+      dex:["Kyber Network — VN","PancakeSwap — APAC","WOOFi — TW","KLAYswap — KR","Astroport — KR"],
+      consumer:["Sky Mavis / Axie (Ronin) — VN","Immutable — AU","Animoca / The Sandbox — HK","Yield Guild Games — PH","WEMIX PLAY — KR"],
+      dao:["Aptos Foundation — APAC","Sui / Mysten Labs — APAC","Astar Foundation — JP","Kaia (Kakao+LINE) — KR/JP","Oasys — JP"],
+      brokers:["OSL — HK","HashKey — HK","QCP Capital — SG","B2C2 APAC — HK","GSR — SG/HK"],
+      mm:["Amber Group — SG","QCP — SG","Kronos Research — TW","Presto Labs — KR","DWF Labs — SG","Auros — APAC"],
+      custody:["Hex Trust — HK","Cobo — SG","Cactus (Matrixport) — SG","Rakkar Digital — SG","Liminal — SG/IN","Ginco — JP","Orbix (KBank) — TH"],
+      chains:["Aptos / Sui / Sei — APAC","Astar / Oasys — JP","Kaia — KR/JP","WEMIX — KR","ICON — KR","Injective — APAC","Conflux — CN"],
+      stable:["StraitsX (XSGD/XUSD) — SG","First Digital (FDUSD) — HK","JPYC — JP","GMO-Z (GYEN) — JP","ANZ (A$DC) — AU","Rupiah Token (IDRT) — ID"],
+      payments:["Transak — IN","Banxa — AU","Coins.ph / PDAX — PH","StraitsX — SG","Alchemy Pay — SG","Triple-A / dtcpay — SG"],
+      walletret:["imToken — SG/CN","Coin98 — VN","TokenPocket — APAC","SafePal — SG","Bitget Wallet — APAC","Klip (Kakao) — KR"],
+      walletinst:["Cobo — SG","Liminal — SG/IN","Safeheron — SG/CN","Hex Trust — HK","Rakkar Digital — SG"]
+    };
+    var ICPS=[
+      {id:"banks",short:"Banks & FIs",name:"Financial institutions & banks",seg:"inst",tier:"emerging",icon:"ti-building-bank",
+       tagline:"Digital banks and TradFi entering crypto — tokenization, stablecoins, custody.",dealShort:"Enterprise",
+       note:"Compliance-led. RWA market $31B+ and up ~200% YoY. GENIUS Act + MiCA rulemaking is the wedge; buyer is risk / compliance.",
+       products:["OM","TG","AS","PS"],personas:["Compliance / AML officer","CISO / Head of Security"],
+       triggers:["Tokenization / RWA announcement","GENIUS Act rulemaking","Audit purchase"],hacks:["JPMorgan JLTXX","BlackRock BUIDL ~$2.5B"],
+       pains:[
+        {p:"Building on-chain products (tokenization, stablecoins)",s:"Real-time monitoring of contracts, assets, bridges & oracles + custom incident-response plans; 300+ risk types.",prod:["OM"]},
+        {p:"Custody users falling for investment scams / pig-butchering",s:"Fraud detection at the withdrawal stage; ML on suspicious destination addresses.",prod:["TG","AS"]},
+        {p:"Wallet tech needs advanced approval policies",s:"Pre-transaction simulation with human-readable outcomes; policy combining on-chain + off-chain bank data.",prod:["TG"]},
+        {p:"Don't understand the risks of on-chain projects",s:"Risk assessment, tailored monitoring, IR playbooks, Security Council participation.",prod:["PS","OM"]}
+       ]},
+      {id:"funds",short:"Asset managers",name:"Asset managers & funds",seg:"inst",tier:"core",icon:"ti-chart-pie",
+       tagline:"Hedge funds, crypto funds, treasury managers.",dealShort:"Mid-market",
+       note:"Sells across the full product line with a strong cross-sell and network effect, and tends to move through procurement faster than enterprise accounts.",
+       products:["OM","AS","TG"],personas:["Risk officer / portfolio risk"],
+       triggers:["Peer exploit in a held protocol","TVL growth","Funding round"],hacks:["kpk / Resolv zero-loss save"],
+       pains:[
+        {p:"Can't auto-unwind before risk materializes",s:"Real-time monitoring + automated response (pause, unwind, move to cold) — detects exploits minutes before the first hack tx.",prod:["OM"]},
+        {p:"No view of market risk across assets, protocols, bridges, chains",s:"Catches oracle manipulation, depegs, flashloans, sandwich and bridge exposure with automated reactions.",prod:["OM"]},
+        {p:"Poor compliance on aggregated pool exposure",s:"Real-time screening of aggregated pool exposure, not just single addresses.",prod:["AS"]},
+        {p:"Weak transaction-approval protection",s:"Full simulation, out-of-box phishing/scam/poisoning detection, exposure limits, anomaly detection.",prod:["TG"]},
+        {p:"Compliance feeds lack real-time data",s:"ML-driven address reputation across chains, integrable as a wallet policy via API/SDK.",prod:["AS"]},
+        {p:"Bridges are a big multi-chain risk",s:"Bridge monitoring + pre-transaction bridge risk assessment across 70+ chains.",prod:["OM","TG"]},
+        {p:"No way to trigger on-chain actions from signals (alpha)",s:"Automated on-chain actions from out-of-box and custom detection logic.",prod:["OM"]}
+       ]},
+      {id:"cex",short:"CEXs",name:"Centralized exchanges",seg:"cefi",tier:"top",icon:"ti-arrows-exchange",
+       tagline:"Spot, derivatives and hybrid exchanges.",dealShort:"Enterprise",
+       note:"Nation-state targets with heavy regulatory exposure. The emotional driver is \"not being the next Bybit.\"",
+       products:["TG","AS","OM","WP"],personas:["CISO / Head of Security"],
+       triggers:["Own or peer incident","New L2 / chain launch","Security hire posting"],hacks:["Bybit $1.5B (largest ever)","Upbit ~$30–36M","Coinbase insider $180–400M"],
+       pains:[
+        {p:"Users withdrawing funds into fraud",s:"Real-time fraud detection at withdrawal; cross-chain monitoring of malicious infrastructure.",prod:["TG","AS"]},
+        {p:"Yield / earn products carry DeFi risk",s:"Real-time monitoring of the underlying protocols with automated alerts and actions.",prod:["OM"]},
+        {p:"Non-custodial wallet needs user protection",s:"Wallet-embedded simulation, malicious dApp/URL detection, drainer & phishing alerts, token screening.",prod:["WP"]},
+        {p:"Operating an L2 chain (Base, Ink)",s:"Chain-level monitoring of bridges, oracles, core contracts and infra wallets — an ecosystem umbrella.",prod:["OM"]},
+        {p:"Internal ops wallets (the ByBit / Safe case)",s:"Pre-tx simulation verifying true intent; granular policy; behavioral anomaly detection for compromised keys.",prod:["TG"]},
+        {p:"Token screening for new listings",s:"Real-time token risk: malicious contracts, rug-pull indicators, ongoing monitoring of listed tokens.",prod:["AS","OM"]}
+       ]},
+      {id:"defi",short:"DeFi protocols",name:"DeFi protocols & DAOs",seg:"defi",tier:"top",icon:"ti-topology-ring",
+       tagline:"Perps, AMMs, lending, LSTs / LRTs, stablecoin protocols.",dealShort:"Mid-market",
+       note:"Over 50% of attacks are now compromised accounts / ops, not code — audits are necessary but not sufficient. Hottest right after their own or a peer's incident.",
+       products:["OM","AS"],personas:["Protocol lead / core dev","DAO security council"],
+       triggers:["Own or peer exploit (48h play)","Mainnet / TGE","Governance security RFP"],hacks:["Drift $285M","Balancer $128M","Cetus $223M"],
+       pains:[
+        {p:"Audited but still getting hacked",s:"Holistic post-audit layer monitoring every attack vector + automated pause / circuit breakers; 99.5% detection rate.",prod:["OM"]},
+        {p:"Want to monitor invariants and operational state",s:"Custom detection agents at block-level granularity, UI for non-technical users + SDK/API and a template library.",prod:["OM"]},
+        {p:"Frontend compliance has real-time gaps and is overpriced",s:"Real-time screening at frontend connect with a 0.001% false-positive rate.",prod:["AS"]}
+       ]},
+      {id:"dex",short:"DEXs",name:"Decentralized exchanges",seg:"defi",tier:"core",icon:"ti-arrows-shuffle",
+       tagline:"AMMs, order-book DEXs, perps.",dealShort:"Mid-market",
+       note:"Token-warning and frontend-compliance use cases are the clearest entry points.",
+       products:["OM","AS","WP","TG"],personas:["Protocol lead / core dev"],
+       triggers:["Peer AMM exploit","New token listings","Treasury growth"],hacks:["Cetus $223M","GMX $42M"],
+       pains:[
+        {p:"Monitor smart contracts and auto-act before incidents",s:"Real-time monitoring + automated prevention; 300+ risk types, minutes of advance warning.",prod:["OM"]},
+        {p:"Warn users about malicious listed tokens (the Uniswap case)",s:"Token risk screening for rug-pulls, honeypots and spoofed tokens with real-time user warnings.",prod:["AS","WP"]},
+        {p:"Frontend compliance lacks real-time data — laundering risk",s:"Wallet screening at connect, flagging sanctions, fraud, exploits and mixers within the same block.",prod:["AS"]},
+        {p:"May run a wallet or build their own chain",s:"Wallet Protect for the consumer wallet; on-chain monitoring at the chain level.",prod:["WP","OM"]},
+        {p:"Treasuries and governance need protection",s:"Treasury wallet monitoring + governance proposal screening for malicious code updates.",prod:["OM","TG"]}
+       ]},
+      {id:"consumer",short:"Consumer dApps",name:"Consumer dApps & marketplaces",seg:"defi",tier:"selective",icon:"ti-device-gamepad-2",
+       tagline:"Gaming, NFT marketplaces, consumer apps.",dealShort:"Selective",
+       note:"Typically a smaller security budget — qualify for genuine budget and a real incident concern before investing outreach time.",
+       products:["OM","WP","AS"],personas:["Protocol lead / core dev"],
+       triggers:["Smart-contract incident","Large user growth"],hacks:["Ronin $624M (Axie)"],
+       pains:[
+        {p:"Smart-contract security and incident response",s:"Real-time monitoring for contract risk, frontend attacks and operational anomalies.",prod:["OM"]},
+        {p:"Protect end-users from phishing, scams, malicious tokens / NFTs",s:"Simulation, malicious URL/dApp detection, NFT reputation scoring, token screening — embeddable.",prod:["WP","AS"]}
+       ]},
+      {id:"dao",short:"DAO treasuries",name:"DAO treasuries & foundations",seg:"defi",tier:"core",icon:"ti-vote",
+       tagline:"DAO treasuries, foundations, vesting platforms.",dealShort:"Mid-market",
+       note:"Procurement typically runs as a public governance proposal + vote — the forum post effectively is the sales deck.",
+       products:["OM","TG"],personas:["DAO security council / multisig signers"],
+       triggers:["Governance attack","Treasury wallet compromise","Security RFP thread"],hacks:[],
+       pains:[
+        {p:"Vesting platforms and token claims need policy monitoring",s:"Vesting & claims monitoring with custom agents for policy violations and automated enforcement.",prod:["OM"]},
+        {p:"Foundation / dev team wallets get compromised",s:"Real-time wallet-compromise detection: key-theft indicators, ownership changes, behavioral anomalies.",prod:["OM","TG"]},
+        {p:"Governance proposal attacks are hard to verify",s:"Governance risk monitoring flags suspicious proposals and malicious code in upgrades before execution.",prod:["OM"]}
+       ]},
+      {id:"brokers",short:"Brokers / OTC",name:"Brokers & trading platforms",seg:"cefi",tier:"core",icon:"ti-briefcase",
+       tagline:"Prime brokers, OTC desks, trading platforms.",dealShort:"Mid-market",
+       note:"Platform security + counterparty screening is the entry; trading-ops policy enforcement expands it.",
+       products:["OM","TG","AS"],personas:["Risk officer / portfolio risk","CISO / Head of Security"],
+       triggers:["Counterparty incident","New on-chain product"],hacks:[],
+       pains:[
+        {p:"Platform security across infra and DeFi positions",s:"Real-time monitoring of assets, protocol dependencies and operational risk + automated response.",prod:["OM"]},
+        {p:"Transaction security and policy for trading ops",s:"Pre-transaction simulation, granular policies and behavioral anomaly detection.",prod:["TG"]},
+        {p:"Compliance screening of counterparties and flows",s:"Real-time address reputation across chains, integrable into trading / settlement.",prod:["AS"]}
+       ]},
+      {id:"mm",short:"Market makers",name:"Market makers & liquidity providers",seg:"inst",tier:"core",icon:"ti-droplet",
+       tagline:"LPs and MEV-aware trading firms.",dealShort:"Mid-market",
+       note:"Automated protect / unwind is the headline capability for high-volume trading firms.",
+       products:["OM","TG","AS"],personas:["Risk officer / portfolio risk"],
+       triggers:["Protocol exploit in farmed pools","Depeg / liquidity event"],hacks:[],
+       pains:[
+        {p:"Real-time risk across farming / LP at scale",s:"Protocol, market and operational risk monitoring with automated protect / unwind.",prod:["OM"]},
+        {p:"Transaction security and policies for high volume",s:"Simulation-based security with scalable policy enforcement.",prod:["TG"]},
+        {p:"Compliance and counterparty risk",s:"Real-time screening integrable into trading infrastructure.",prod:["AS"]}
+       ]},
+      {id:"custody",short:"Custodians",name:"Custodians",seg:"inst",tier:"top",icon:"ti-lock",
+       tagline:"Institutional custody and MPC custodians.",dealShort:"Enterprise + resell",
+       note:"Carries a resell / white-label upside. Some are pivoting to payments (the Zodia Custody pattern).",
+       products:["TG","OM","AS","WP"],personas:["CISO / Head of Security","Compliance / AML officer"],
+       triggers:["Regulatory deadline (MiCA)","New product launch"],hacks:[],
+       pains:[
+        {p:"Transaction security and policy enforcement across custody ops",s:"Transaction Guard: simulation, policy enforcement and threat detection across all custody operations.",prod:["TG"]},
+        {p:"Want to resell security to their own customers",s:"White-label / resell of Platform, Transaction Guard, Address Screener, Wallet Protect and Fraud Prevention.",prod:["OM","TG","AS","WP"]}
+       ]},
+      {id:"chains",short:"L1 / L2 chains",name:"Layer 1 & Layer 2 chains",seg:"infra",tier:"top",icon:"ti-stack-2",
+       tagline:"Public chains, rollups, appchains.",dealShort:"Strategic",
+       note:"Ecosystem protection as a builder-attraction strategy (the Starknet model). Bridges are existential risk; non-EVM chains tend to be the largest, most strategic deals.",
+       products:["OM","AS","WP","TG","PS"],personas:["Foundation COO / CTO / ecosystem lead"],
+       triggers:["Bridge exploit","Mainnet / TGE","Ecosystem hack"],hacks:["KelpDAO $292M","Ronin $624M"],
+       pains:[
+        {p:"Chain infra monitoring (bridges, oracles, core, fault proofs)",s:"Comprehensive chain-level monitoring with tailored risk plans and IR playbooks.",prod:["OM","PS"]},
+        {p:"Protect ecosystem protocols — hacks hurt chain reputation",s:"Ecosystem-wide security umbrella; onboard ecosystem protocols with chain-wide early warning.",prod:["OM"]},
+        {p:"Want compliance providers supporting the chain",s:"70+ chain support plus Screener / compliance APIs for all ecosystem participants.",prod:["AS","OM"]},
+        {p:"Want wallet integrations for retail security",s:"Wallet Protect SDK for wallet providers on the chain.",prod:["WP"]},
+        {p:"Detect rug-pulls and fraud networks chain-wide",s:"Real-time ML + graph-based detection across the chain.",prod:["AS","OM"]},
+        {p:"Need compliance for on-chain payment providers / exchanges",s:"Enterprise-grade Screener with a streamable flagged-address database.",prod:["AS"]},
+        {p:"Treasury and admin / operational wallets",s:"Transaction Guard simulation + policy with Platform monitoring.",prod:["TG","OM"]}
+       ]},
+      {id:"stable",short:"Stablecoins",name:"Stablecoin issuers",seg:"infra",tier:"top",icon:"ti-coin",
+       tagline:"Regulated issuers, treasury operators, mint / burn.",dealShort:"Enterprise",
+       note:"GENIUS Act proposed rules require the technical ability to block, freeze and reject transactions — near-verbatim Guardian + Screener. Resolv's $80M unbacked mint and depeg is the fear event.",
+       products:["OM","AS","TG"],personas:["Compliance / AML officer"],
+       triggers:["GENIUS Act rulemaking","Depeg / unbacked mint","New chain deployment"],hacks:["Resolv $80M unbacked mint → depeg <$0.20"],
+       pains:[
+        {p:"Monitor contracts for abnormal behavior",s:"Detects unexpected mints / burns, parameter changes, access-control modifications and exploitation attempts.",prod:["OM"]},
+        {p:"Flag illicit activity of ecosystem holders",s:"ML-driven detection plus graph analysis.",prod:["AS","OM"]},
+        {p:"Chain-level monitoring and freezing (the Certora case)",s:"Chain-level monitoring across all deployment chains with automated freeze triggers.",prod:["OM"]},
+        {p:"Infrastructure wallet risk",s:"Transaction Guard simulation + policy on operational wallets.",prod:["TG","OM"]},
+        {p:"Compliance and fraud on mint / burn",s:"Real-time screening of mint / burn counterparties with behavioral fraud detection.",prod:["AS","TG"]},
+        {p:"Impersonation and brand threat intel",s:"Detects impersonation tokens, phishing campaigns and scam infrastructure targeting the brand.",prod:["OM","AS"]}
+       ]},
+      {id:"payments",short:"Payments / ramps",name:"Payment providers & on/off-ramps",seg:"infra",tier:"core",icon:"ti-credit-card",
+       tagline:"PSPs, on / off-ramps, payment rails.",dealShort:"Enterprise",
+       note:"Strong Wallet Protect product-market fit. Fraud + compliance screening is the entry point, and the upside per account can be large.",
+       products:["AS","TG","OM"],personas:["Compliance / AML officer"],
+       triggers:["Fraud spike","New corridor / license"],hacks:[],
+       pains:[
+        {p:"Real-time counterparty compliance for payment flows",s:"Real-time screening + streamable flagged-address DB for sanctions, fraud, exploits and mixers via API.",prod:["AS"]},
+        {p:"Fraud on ramp transactions",s:"Transaction-level fraud detection for pig-butchering, scam destinations and suspicious patterns.",prod:["TG","AS"]},
+        {p:"On-chain infrastructure monitoring",s:"Contracts and operational wallets with automated incident response.",prod:["OM"]}
+       ]},
+      {id:"walletret",short:"Wallets — retail",name:"Wallet providers — retail",seg:"wallets",tier:"core",icon:"ti-wallet",
+       tagline:"Consumer wallets and multisigs.",dealShort:"High-value",
+       note:"Strong Wallet Protect fit — high value when the user base is large.",
+       products:["WP","AS"],personas:["Product / security lead"],
+       triggers:["Drainer campaign","User growth","New chain support"],hacks:[],
+       pains:[
+        {p:"Users need to understand tx outcomes before approval",s:"Simulation with human-readable balance changes, transfers and approvals before signing.",prod:["WP"]},
+        {p:"Protect users from drainers, phishing, scams",s:"Real-time detection and blocking powered by ML threat intelligence.",prod:["WP"]},
+        {p:"Warn users about malicious URLs before connect",s:"dApp / URL reputation scoring on phishing history, domain spoofing and social-engineering signals.",prod:["WP"]},
+        {p:"Address poisoning in history and explorers",s:"Detection of spoofed addresses with a warning before sending.",prod:["WP"]},
+        {p:"Screen tokens before interaction",s:"Token reputation engine flagging malicious / spoofed tokens and rug-pull / honeypot indicators.",prod:["WP"]},
+        {p:"Protect users from sanctioned addresses",s:"Real-time sanctions / compliance screening of counterparties.",prod:["WP","AS"]}
+       ]},
+      {id:"walletinst",short:"Wallets — institutional",name:"Wallet providers — institutional",seg:"wallets",tier:"core",icon:"ti-shield-lock",
+       tagline:"MPC / institutional wallets and multisigs.",dealShort:"Integration-led",
+       note:"Integrates with Fireblocks, Safe, Utila and Fordefi — the advanced-policy framework is the differentiator.",
+       products:["WP","TG"],personas:["CISO / Head of Security","Risk officer / portfolio risk"],
+       triggers:["Compliance deadline","Insider-threat concern"],hacks:[],
+       pains:[
+        {p:"Retail protections plus institutional-grade requirements",s:"All Wallet Protect capabilities adapted for institutional interfaces.",prod:["WP","TG"]},
+        {p:"Can't create advanced policy beyond built-in wallet rules",s:"Hyper-customizable framework: inspects simulation output, off-chain bank API checks, behavioral patterns and toxic-pool detection.",prod:["TG"]}
+       ]}
+    ];
+
+    var FILTERS=[{key:"all",name:"All segments"},{key:"defi",name:SEG.defi.name},{key:"cefi",name:SEG.cefi.name},{key:"inst",name:SEG.inst.name},{key:"infra",name:SEG.infra.name},{key:"wallets",name:SEG.wallets.name}];
+    var state={mode:"browse",filter:"all",idx:0,deck:[],pos:0,revealed:false};
+    var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");};
+    var send=(typeof window!=="undefined"&&typeof window.sendPrompt==="function")?window.sendPrompt:function(t){alert("This action runs inside Claude chat:\n\n"+t);};
+    var filtered=function(){return state.filter==="all"?ICPS:ICPS.filter(function(x){return x.seg===state.filter;});};
+    var currentICP=function(){return state.mode==="cards"?(state.deck[state.pos]||ICPS[0]):filtered()[state.idx];};
+    var prodTags=function(arr){return '<span class="icp-tags">'+arr.map(function(c){return '<span class="icp-tag" title="'+esc(PROD[c])+'">'+c+'</span>';}).join("")+'</span>';};
+    var apacTags=function(arr){return '<div class="icp-chiprow">'+arr.map(function(s){var p=s.split(" — ");var nm=p[0],rg=p[1]?'<span class="rg">'+esc(p[1])+'</span>':'';return '<span class="icp-mini">'+esc(nm)+rg+'</span>';}).join("")+'</div>';};
+
+    function buildDeck(){
+      var l=filtered().slice();
+      for(var i=l.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=l[i];l[i]=l[j];l[j]=t;}
+      state.deck=l;state.pos=0;state.revealed=false;
+    }
+
+    function renderModes(){
+      var modes=[{k:"browse",l:"Browse",i:"ti-layout-grid"},{k:"cards",l:"Card mode",i:"ti-cards"}];
+      var el=document.getElementById("icpModes");
+      el.innerHTML=modes.map(function(m){return '<button class="icp-mode" data-m="'+m.k+'" aria-pressed="'+(state.mode===m.k)+'"><i class="ti '+m.i+'" aria-hidden="true"></i>'+m.l+'</button>';}).join("");
+      Array.prototype.forEach.call(el.querySelectorAll(".icp-mode"),function(b){
+        b.onclick=function(){state.mode=b.getAttribute("data-m");if(state.mode==="cards"&&!state.deck.length)buildDeck();renderAll();};
+      });
+    }
+
+    function renderFilter(){
+      var el=document.getElementById("icpFilter");
+      el.innerHTML=FILTERS.map(function(f){
+        var n=f.key==="all"?ICPS.length:ICPS.filter(function(x){return x.seg===f.key;}).length;
+        var dot=f.key==="all"?'':'<span class="icp-dot" style="background:'+SEG[f.key].color+'"></span>';
+        return '<button class="icp-pill" data-f="'+f.key+'" aria-pressed="'+(state.filter===f.key)+'">'+dot+esc(f.name)+' <span class="icp-ct">'+n+'</span></button>';
+      }).join("");
+      Array.prototype.forEach.call(el.querySelectorAll(".icp-pill"),function(b){
+        b.onclick=function(){state.filter=b.getAttribute("data-f");state.idx=0;if(state.mode==="cards")buildDeck();renderAll();};
+      });
+    }
+
+    function renderChips(){
+      var list=filtered(),el=document.getElementById("icpChips");
+      el.innerHTML=list.map(function(x,i){
+        return '<button class="icp-chip" data-i="'+i+'" role="tab" aria-pressed="'+(i===state.idx)+'"><span class="icp-dot" style="background:'+SEG[x.seg].color+'"></span>'+esc(x.short)+'</button>';
+      }).join("");
+      Array.prototype.forEach.call(el.querySelectorAll(".icp-chip"),function(b){
+        b.onclick=function(){state.idx=parseInt(b.getAttribute("data-i"),10);renderChips();renderCard();b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});};
+      });
+      document.getElementById("icpPos").textContent=(state.idx+1)+" / "+list.length;
+    }
+
+    function renderDeckBar(){
+      document.getElementById("icpDPos").textContent=(state.pos+1)+" / "+state.deck.length;
+    }
+
+    function headHTML(x){
+      var t=TIER[x.tier],col=SEG[x.seg].color;
+      return '<div class="icp-chead">'+
+          '<div class="icp-avatar"><i class="ti '+x.icon+'" aria-hidden="true" style="color:'+col+'"></i></div>'+
+          '<div class="icp-htext">'+
+            '<p class="icp-name">'+esc(x.name)+'</p>'+
+            '<p class="icp-tagline">'+esc(x.tagline)+'</p>'+
+            '<div class="icp-badges">'+
+              '<span class="icp-seg-badge" style="color:'+col+'"><span class="icp-dot" style="background:'+col+'"></span>'+esc(SEG[x.seg].name)+'</span>'+
+              '<span class="icp-badge" style="background:var('+t.bg+');color:var('+t.fg+')"><i class="ti '+t.icon+'" aria-hidden="true"></i>'+t.label+'</span>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+    }
+    function metricsHTML(x){
+      return '<div class="icp-metrics">'+
+          '<div class="icp-metric"><p class="lbl">Pain points</p><p class="val">'+x.pains.length+'</p></div>'+
+          '<div class="icp-metric"><p class="lbl">Account profile</p><p class="val">'+esc(x.dealShort)+'</p></div>'+
+          '<div class="icp-metric"><p class="lbl">Products fit</p><p class="val">'+x.products.length+' of 5</p></div>'+
+        '</div>';
+    }
+    function detailHTML(x){
+      var col=SEG[x.seg].color;
+      var hacks=x.hacks&&x.hacks.length?'<div class="icp-section"><h4><i class="ti ti-alert-hexagon" aria-hidden="true"></i> Segment-matched hacks</h4><div class="icp-chiprow">'+x.hacks.map(function(h){return '<span class="icp-mini hack">'+esc(h)+'</span>';}).join("")+'</div></div>':'';
+      var apac=APAC[x.id]?'<div class="icp-section icp-apac"><h4><i class="ti ti-map-pin" aria-hidden="true"></i> APAC accounts to target</h4>'+apacTags(APAC[x.id])+'</div>':'';
+      return '<div class="icp-note"><i class="ti ti-bulb" aria-hidden="true"></i> '+esc(x.note)+'</div>'+
+        apac+
+        '<div class="icp-section"><h4><i class="ti ti-list-check" aria-hidden="true"></i> Pain points &rarr; what fits</h4>'+
+          '<ul class="icp-pains">'+x.pains.map(function(pn){
+            return '<li class="icp-pain"><i class="ti ti-point pi" aria-hidden="true" style="color:'+col+'"></i><div><p class="pp">'+esc(pn.p)+'</p><p class="ps">'+esc(pn.s)+'</p>'+prodTags(pn.prod)+'</div></li>';
+          }).join("")+'</ul>'+
+        '</div>'+
+        '<div class="icp-grid2">'+
+          '<div class="icp-section"><h4><i class="ti ti-user-search" aria-hidden="true"></i> Who buys</h4><div class="icp-chiprow">'+x.personas.map(function(p){return '<span class="icp-mini">'+esc(p)+'</span>';}).join("")+'</div></div>'+
+          '<div class="icp-section"><h4><i class="ti ti-bolt" aria-hidden="true"></i> Trigger events</h4><div class="icp-chiprow">'+x.triggers.map(function(p){return '<span class="icp-mini">'+esc(p)+'</span>';}).join("")+'</div></div>'+
+        '</div>'+
+        hacks+
+        '<div class="icp-foot">'+
+          '<button class="icp-btn primary" data-act="out"><i class="ti ti-mail" aria-hidden="true"></i> Draft outreach for this ICP &nearr;</button>'+
+          '<button class="icp-btn" data-act="list"><i class="ti ti-users" aria-hidden="true"></i> Build an APAC prospect list &nearr;</button>'+
+        '</div>';
+    }
+
+    function wireFoot(c,x){
+      var o=c.querySelector('[data-act="out"]'),l=c.querySelector('[data-act="list"]');
+      if(o)o.onclick=function(){send('Draft a short, signal-led cold outreach (a 5-line email + a Telegram opener) for Hypernative targeting the "'+x.name+'" segment in APAC. Anchor it on a relevant trigger event, use only safe-to-say product claims from the playbook, and keep it free of fluff.');};
+      if(l)l.onclick=function(){send('Build me an APAC prospect list for the "'+x.name+'" ICP segment for Hypernative. Find accounts that fit, tie each to a current trigger event, and suggest the buyer persona to target.');};
+    }
+
+    function renderCard(){
+      var x=currentICP(),c=document.getElementById("icpCard");
+      if(!x){c.innerHTML="";return;}
+      var html=headHTML(x)+metricsHTML(x);
+      if(state.mode==="cards"&&!state.revealed){
+        html+='<div class="icp-front-hint">Recall the pain points, products and APAC accounts &mdash; then reveal.</div>'+
+              '<div class="icp-reveal"><button class="icp-btn primary" id="icpReveal"><i class="ti ti-eye" aria-hidden="true"></i> Reveal details</button></div>';
+        c.innerHTML=html;
+        document.getElementById("icpReveal").onclick=function(){state.revealed=true;renderCard();};
+      }else{
+        html+=detailHTML(x);
+        c.innerHTML=html;
+        wireFoot(c,x);
+      }
+    }
+
+    function renderAll(){
+      renderModes();renderFilter();
+      var cards=state.mode==="cards";
+      document.getElementById("icpBrowseNav").style.display=cards?"none":"flex";
+      document.getElementById("icpDeckBar").style.display=cards?"flex":"none";
+      if(cards){if(!state.deck.length)buildDeck();renderDeckBar();}else{renderChips();}
+      renderCard();
+    }
+
+    document.getElementById("icpPrev").onclick=function(){var n=filtered().length;state.idx=(state.idx-1+n)%n;renderChips();renderCard();};
+    document.getElementById("icpNext").onclick=function(){var n=filtered().length;state.idx=(state.idx+1)%n;renderChips();renderCard();};
+    document.getElementById("icpShuffle").onclick=function(){buildDeck();renderDeckBar();renderCard();};
+    document.getElementById("icpDPrev").onclick=function(){var n=state.deck.length;state.pos=(state.pos-1+n)%n;state.revealed=false;renderDeckBar();renderCard();};
+    document.getElementById("icpDNext").onclick=function(){var n=state.deck.length;state.pos=(state.pos+1)%n;state.revealed=false;renderDeckBar();renderCard();};
+    renderAll();
+  })();
+  </script>
+</div>
+</body>
+</html>
