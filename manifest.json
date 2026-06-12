@@ -1,0 +1,14 @@
+{
+  "name": "Hypernative ICP study",
+  "short_name": "ICP study",
+  "description": "Interactive study deck of ideal-customer segments with APAC target accounts.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#161615",
+  "theme_color": "#161615",
+  "icons": [
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
