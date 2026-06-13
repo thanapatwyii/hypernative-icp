@@ -108,6 +108,30 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
 .chip .rg{font-size:10px;padding:1px 6px;border-radius:999px;background:var(--color-background-primary);color:var(--color-text-tertiary);box-shadow:inset 0 0 0 0.5px var(--color-border-tertiary);}
 .chip.hack{background:var(--color-background-danger);color:var(--color-text-danger);}
 .chip.hit{background:var(--color-background-success);color:var(--color-text-success);}
+button.chip{font:inherit;border:0;cursor:pointer;transition:transform .12s;}
+button.chip:active{transform:scale(.96);}
+.chip.save{background:var(--color-background-success);color:var(--color-text-success);}
+.chip.rwa{background:var(--color-background-info);color:var(--color-text-info);}
+.chip.tap i{font-size:13px;opacity:.55;margin-left:1px;}
+.sheet-wrap{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s;}
+@media(min-width:600px){.sheet-wrap{align-items:center;}}
+.sheet-wrap.open{opacity:1;pointer-events:auto;}
+.sheet-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);}
+.sheet{position:relative;width:min(560px,100%);max-height:88vh;overflow-y:auto;background:var(--color-background-primary);border-radius:24px 24px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow-card);transform:translateY(24px);transition:transform .3s cubic-bezier(.22,.61,.36,1);}
+@media(min-width:600px){.sheet{border-radius:22px;transform:translateY(12px) scale(.985);}}
+.sheet-wrap.open .sheet{transform:none;}
+.sheet-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:0;background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.sheet-head{display:flex;gap:13px;align-items:center;padding-right:40px;}
+.sheet-icon{width:46px;height:46px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.sheet-title{font-size:18px;font-weight:600;margin:0;letter-spacing:-0.01em;line-height:1.25;}
+.sheet-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;}
+.sheet-meta span{font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:999px;background:var(--color-background-secondary);color:var(--color-text-secondary);}
+.sheet-body{margin-top:4px;}
+.sheet-sec{margin-top:16px;}
+.sheet-sec h4{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--color-text-tertiary);margin:0 0 5px;text-transform:uppercase;}
+.sheet-sec p{font-size:13.5px;line-height:1.6;margin:0;}
+.sheet-sec.accent{background:var(--color-background-secondary);border-radius:14px;padding:13px 15px;}
+.sheet-sec.accent h4{color:var(--ac,var(--color-text-primary));}
 .pain{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
 .pain:last-of-type{border-bottom:0;}
 .pain.extra{display:none;}
@@ -170,6 +194,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
   <div class="carouselwrap">
     <div class="carousel" id="icpCarousel" aria-roledescription="carousel" aria-label="ICP cards"></div>
   </div>
+  <div class="sheet-wrap" id="icpSheet" aria-hidden="true"></div>
   <div id="icpToast" role="status"></div>
 </div>
 
@@ -207,12 +232,79 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
     walletret:["imToken — SG/CN","Coin98 — VN","TokenPocket — APAC","SafePal — SG","Bitget Wallet — APAC","Klip (Kakao) — KR"],
     walletinst:["Cobo — SG","Liminal — SG/IN","Safeheron — SG/CN","Hex Trust — HK","Rakkar Digital — SG"]
   };
+  var HACKS={
+    bybit:{label:"Bybit",cat:"exploit",amount:"$1.5B",date:"21 Feb 2025",
+      who:"Top-tier centralized crypto exchange, founded 2018 (CEO Ben Zhou); large APAC user base.",
+      based:"Dubai, UAE (originally Singapore).",
+      what:"~$1.4–1.5B in ETH stolen — the largest crypto theft ever. Attackers compromised the Safe{Wallet} signing UI so signers blind-signed a malicious multisig transfer. Attributed to Lazarus (DPRK). Withdrawals restored in ~12 hours; assets stayed 1:1 backed.",
+      angle:"The definitive reference for any exchange, custodian or institutional wallet. The failure was operational signing security, not a contract bug — the case for pre-signing simulation and verifying true intent."},
+    upbit:{label:"Upbit",cat:"exploit",amount:"~$36M",date:"27 Nov 2025",
+      who:"South Korea's largest crypto exchange, operated by Dunamu.",
+      based:"Seoul, South Korea.",
+      what:"~$30–36M in Solana-based tokens drained from a hot wallet via hijacked / impersonated admin credentials. Lazarus suspected — mirrors Upbit's 2019 $49M breach (both November, both hot-wallet). Users reimbursed from reserves.",
+      angle:"Korea-local proof for exchange and custody targets; the recurring nation-state pattern points to real-time monitoring and withdrawal-stage fraud detection."},
+    coinbase:{label:"Coinbase",cat:"exploit",amount:"$180–400M",date:"May 2025",
+      who:"Largest US crypto exchange (NASDAQ: COIN).",
+      based:"United States (remote-first; founded San Francisco).",
+      what:"Overseas support contractors were bribed to leak customer data; a $20M ransom was demanded and refused. Customer funds were not affected. Estimated $180–400M in remediation and reimbursement.",
+      angle:"The insider-threat / privileged-access story — behavioral anomaly detection and granular policy enforcement on internal and operational wallets."},
+    drift:{label:"Drift",cat:"exploit",amount:"$285M",date:"1 Apr 2026",
+      who:"Decentralized perpetuals (perps) exchange (Drift Labs).",
+      based:"Globally distributed team; protocol on Solana.",
+      what:"~$285M (over half of TVL) drained in ~12 minutes. No contract bug — a six-month social-engineering operation (attackers posed as a quant trading firm) got Security Council members to pre-sign malicious admin transactions via Solana durable nonces; a zero-timelock migration removed the last safeguard. DPRK-linked.",
+      angle:"The flagship 'audits aren't enough — the attack moved to people and operations' proof. Real-time detection, automated response and pre-signing simulation."},
+    balancer:{label:"Balancer",cat:"exploit",amount:"$128M",date:"3 Nov 2025",
+      who:"Decentralized AMM and automated portfolio / liquidity protocol.",
+      based:"Globally distributed DAO; Ethereum-native.",
+      what:"V2 ComposableStablePool drained $128.6M across six chains in under 30 minutes via a rounding / precision bug chained through batchSwap — despite 11 audits by 4 firms.",
+      angle:"Ends the 'we're audited' objection: audits are necessary but not sufficient; only real-time monitoring and automated pause catch this."},
+    cetus:{label:"Cetus",cat:"exploit",amount:"$223M",date:"22 May 2025",
+      who:"Largest DEX and concentrated-liquidity protocol on the Sui blockchain.",
+      based:"Globally distributed; built on Sui (and Aptos) — an APAC-heavy ecosystem.",
+      what:"~$223M drained via an integer-overflow bug in liquidity math (flash loan, a tiny tick range, then overflow). Sui validators froze ~$162M on-chain; the Sui Foundation backed a recovery loan to make users whole.",
+      angle:"Strong for the Sui / Move ecosystem and for chains pitching ecosystem-wide protection, on-chain freeze and monitoring."},
+    gmx:{label:"GMX",cat:"exploit",amount:"~$42M",date:"9 Jul 2025",
+      who:"Leading decentralized perpetual and spot exchange (perps DEX).",
+      based:"Decentralized / pseudonymous team; runs on Arbitrum and Avalanche.",
+      what:"A reentrancy flaw in GMX V1's order logic inflated GLP pool value; ~$42M drained on Arbitrum. The attacker later returned funds, keeping a ~$5M white-hat bounty.",
+      angle:"Classic smart-contract exploit and the 'monitor and auto-act before it spreads' case for DEXs and perps venues."},
+    ronin:{label:"Ronin (Axie)",cat:"exploit",amount:"$624M",date:"23 Mar 2022",
+      who:"Ethereum sidechain built by Sky Mavis for the game Axie Infinity.",
+      based:"Sky Mavis — Ho Chi Minh City, Vietnam.",
+      what:"~$624M (173,600 ETH + $25.5M USDC). Attackers compromised 5 of 9 validator keys — phished a Sky Mavis engineer via a fake job offer (4 keys) and reused a stale Axie DAO authorization (5th). Lazarus (DPRK).",
+      angle:"Vietnam-local proof and the canonical bridge / validator-key story for chains, bridges and gaming infrastructure."},
+    kelpdao:{label:"KelpDAO",cat:"exploit",amount:"$292M",date:"18 Apr 2026",
+      who:"Liquid restaking protocol (issues rsETH); emerged from the Stader Labs ecosystem (India-linked founders).",
+      based:"Globally distributed team.",
+      what:"~$292M (116,500 rsETH) minted / drained, stranded across ~20 chains. A 1-of-1 verifier on its LayerZero bridge was defeated — attackers DDoS'd the legitimate RPC nodes, forced failover to attacker-controlled nodes, and injected fake cross-chain messages. Lazarus / TraderTraitor (DPRK).",
+      angle:"The bridge / cross-chain existential-risk story for LRTs, bridges and chains. Describe it as a compromised verifier under a 1-of-1 config."},
+    resolv:{label:"Resolv",cat:"exploit",amount:"~$80M",date:"2026",
+      who:"Delta-neutral, yield-bearing stablecoin protocol (USR); Resolv Labs.",
+      based:"Globally distributed (Resolv Labs).",
+      what:"~$80M unbacked mint, ~$25M extracted, USR depegged below $0.20 — the reference event for stablecoin reserve and mint integrity.",
+      angle:"For stablecoin issuers under GENIUS / MiCA: monitor for unexpected mints / burns, parameter changes and depeg, with automated freeze — close to the GENIUS Act block / freeze / reject requirement."},
+    kpk:{label:"kpk + Resolv save",cat:"save",amount:"$0 lost",date:"2026",
+      who:"kpk (formerly Karpatkey) — non-custodial, on-chain DeFi treasury manager born from GnosisDAO; has managed $2B+ for ENS, Balancer and the Ethereum Foundation.",
+      based:"DeFi-native; roots in the Gnosis ecosystem.",
+      what:"Automated monitoring and response let a managed position exit Resolv with zero loss while others were hit.",
+      angle:"The best counter to 'monitoring is just alerts' for funds, treasuries and market makers — proof that detection drives real, automated action."},
+    jltxx:{label:"JPMorgan JLTXX",cat:"rwa",amount:"Filed May 2026",date:"",
+      who:"JPMorgan's tokenized money-market fund (Treasuries / repo); share class issued on Ethereum via its Kinexys platform.",
+      based:"New York, US (Kinexys digital-assets unit).",
+      what:"A regulated money-market fund brought on-chain, explicitly aimed at stablecoin issuers needing GENIUS-compliant reserves (~$1M minimum).",
+      angle:"An RWA / tokenization trigger for banks and stablecoin issuers — a compliance / risk buyer putting a fund on a public chain."},
+    buidl:{label:"BlackRock BUIDL",cat:"rwa",amount:"~$2.5B",date:"since Mar 2024",
+      who:"BlackRock's tokenized Treasury money-market fund (BUIDL), tokenized by Securitize; now multi-chain (Ethereum, Solana, BNB Chain).",
+      based:"New York, US.",
+      what:"The flagship of the RWA wave — the tokenized real-world-asset market grew from ~$23B (Dec 2025) to ~$31B (Mar 2026).",
+      angle:"The macro RWA tailwind for institutional and bank outreach."}
+  };
   var ICPS=[
     {id:"banks",short:"Banks & FIs",name:"Financial institutions & banks",seg:"inst",tier:"emerging",icon:"ti-building-bank",
      tagline:"Digital banks and TradFi entering crypto — tokenization, stablecoins, custody.",dealShort:"Enterprise",
      note:"Compliance-led. RWA market $31B+ and up ~200% YoY. GENIUS Act + MiCA rulemaking is the wedge; buyer is risk / compliance.",
      products:["OM","TG","AS","PS"],personas:["Compliance / AML officer","CISO / Head of Security"],
-     triggers:["Tokenization / RWA announcement","GENIUS Act rulemaking","Audit purchase"],hacks:["JPMorgan JLTXX","BlackRock BUIDL ~$2.5B"],
+     triggers:["Tokenization / RWA announcement","GENIUS Act rulemaking","Audit purchase"],hacks:["jltxx","buidl"],
      pains:[
       {p:"Building on-chain products (tokenization, stablecoins)",s:"Real-time monitoring of contracts, assets, bridges & oracles + custom incident-response plans; 300+ risk types.",prod:["OM"]},
       {p:"Custody users falling for investment scams / pig-butchering",s:"Fraud detection at the withdrawal stage; ML on suspicious destination addresses.",prod:["TG","AS"]},
@@ -223,7 +315,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Hedge funds, crypto funds, treasury managers.",dealShort:"Mid-market",
      note:"Sells across the full product line with a strong cross-sell and network effect, and tends to move through procurement faster than enterprise accounts.",
      products:["OM","AS","TG"],personas:["Risk officer / portfolio risk"],
-     triggers:["Peer exploit in a held protocol","TVL growth","Funding round"],hacks:["kpk / Resolv zero-loss save"],
+     triggers:["Peer exploit in a held protocol","TVL growth","Funding round"],hacks:["kpk"],
      pains:[
       {p:"Can't auto-unwind before risk materializes",s:"Real-time monitoring + automated response (pause, unwind, move to cold) — detects exploits minutes before the first hack tx.",prod:["OM"]},
       {p:"No view of market risk across assets, protocols, bridges, chains",s:"Catches oracle manipulation, depegs, flashloans, sandwich and bridge exposure with automated reactions.",prod:["OM"]},
@@ -237,7 +329,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Spot, derivatives and hybrid exchanges.",dealShort:"Enterprise",
      note:"Nation-state targets with heavy regulatory exposure. The emotional driver is \"not being the next Bybit.\"",
      products:["TG","AS","OM","WP"],personas:["CISO / Head of Security"],
-     triggers:["Own or peer incident","New L2 / chain launch","Security hire posting"],hacks:["Bybit $1.5B (largest ever)","Upbit ~$30–36M","Coinbase insider $180–400M"],
+     triggers:["Own or peer incident","New L2 / chain launch","Security hire posting"],hacks:["bybit","upbit","coinbase"],
      pains:[
       {p:"Users withdrawing funds into fraud",s:"Real-time fraud detection at withdrawal; cross-chain monitoring of malicious infrastructure.",prod:["TG","AS"]},
       {p:"Yield / earn products carry DeFi risk",s:"Real-time monitoring of the underlying protocols with automated alerts and actions.",prod:["OM"]},
@@ -250,7 +342,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Perps, AMMs, lending, LSTs / LRTs, stablecoin protocols.",dealShort:"Mid-market",
      note:"Over 50% of attacks are now compromised accounts / ops, not code — audits are necessary but not sufficient. Hottest right after their own or a peer's incident.",
      products:["OM","AS"],personas:["Protocol lead / core dev","DAO security council"],
-     triggers:["Own or peer exploit (48h play)","Mainnet / TGE","Governance security RFP"],hacks:["Drift $285M","Balancer $128M","Cetus $223M"],
+     triggers:["Own or peer exploit (48h play)","Mainnet / TGE","Governance security RFP"],hacks:["drift","balancer","cetus"],
      pains:[
       {p:"Audited but still getting hacked",s:"Holistic post-audit layer monitoring every attack vector + automated pause / circuit breakers; 99.5% detection rate.",prod:["OM"]},
       {p:"Want to monitor invariants and operational state",s:"Custom detection agents at block-level granularity, UI for non-technical users + SDK/API and a template library.",prod:["OM"]},
@@ -260,7 +352,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"AMMs, order-book DEXs, perps.",dealShort:"Mid-market",
      note:"Token-warning and frontend-compliance use cases are the clearest entry points.",
      products:["OM","AS","WP","TG"],personas:["Protocol lead / core dev"],
-     triggers:["Peer AMM exploit","New token listings","Treasury growth"],hacks:["Cetus $223M","GMX $42M"],
+     triggers:["Peer AMM exploit","New token listings","Treasury growth"],hacks:["cetus","gmx"],
      pains:[
       {p:"Monitor smart contracts and auto-act before incidents",s:"Real-time monitoring + automated prevention; 300+ risk types, minutes of advance warning.",prod:["OM"]},
       {p:"Warn users about malicious listed tokens (the Uniswap case)",s:"Token risk screening for rug-pulls, honeypots and spoofed tokens with real-time user warnings.",prod:["AS","WP"]},
@@ -272,7 +364,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Gaming, NFT marketplaces, consumer apps.",dealShort:"Selective",
      note:"Typically a smaller security budget — qualify for genuine budget and a real incident concern before investing outreach time.",
      products:["OM","WP","AS"],personas:["Protocol lead / core dev"],
-     triggers:["Smart-contract incident","Large user growth"],hacks:["Ronin $624M (Axie)"],
+     triggers:["Smart-contract incident","Large user growth"],hacks:["ronin"],
      pains:[
       {p:"Smart-contract security and incident response",s:"Real-time monitoring for contract risk, frontend attacks and operational anomalies.",prod:["OM"]},
       {p:"Protect end-users from phishing, scams, malicious tokens / NFTs",s:"Simulation, malicious URL/dApp detection, NFT reputation scoring, token screening — embeddable.",prod:["WP","AS"]}
@@ -320,7 +412,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Public chains, rollups, appchains.",dealShort:"Strategic",
      note:"Ecosystem protection as a builder-attraction strategy (the Starknet model). Bridges are existential risk; non-EVM chains tend to be the largest, most strategic deals.",
      products:["OM","AS","WP","TG","PS"],personas:["Foundation COO / CTO / ecosystem lead"],
-     triggers:["Bridge exploit","Mainnet / TGE","Ecosystem hack"],hacks:["KelpDAO $292M","Ronin $624M"],
+     triggers:["Bridge exploit","Mainnet / TGE","Ecosystem hack"],hacks:["kelpdao","ronin"],
      pains:[
       {p:"Chain infra monitoring (bridges, oracles, core, fault proofs)",s:"Comprehensive chain-level monitoring with tailored risk plans and IR playbooks.",prod:["OM","PS"]},
       {p:"Protect ecosystem protocols — hacks hurt chain reputation",s:"Ecosystem-wide security umbrella; onboard ecosystem protocols with chain-wide early warning.",prod:["OM"]},
@@ -334,7 +426,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
      tagline:"Regulated issuers, treasury operators, mint / burn.",dealShort:"Enterprise",
      note:"GENIUS Act proposed rules require the technical ability to block, freeze and reject transactions — near-verbatim Guardian + Screener. Resolv's $80M unbacked mint and depeg is the fear event.",
      products:["OM","AS","TG"],personas:["Compliance / AML officer"],
-     triggers:["GENIUS Act rulemaking","Depeg / unbacked mint","New chain deployment"],hacks:["Resolv $80M unbacked mint → depeg <$0.20"],
+     triggers:["GENIUS Act rulemaking","Depeg / unbacked mint","New chain deployment"],hacks:["resolv"],
      pains:[
       {p:"Monitor contracts for abnormal behavior",s:"Detects unexpected mints / burns, parameter changes, access-control modifications and exploitation attempts.",prod:["OM"]},
       {p:"Flag illicit activity of ecosystem holders",s:"ML-driven detection plus graph analysis.",prod:["AS","OM"]},
@@ -444,7 +536,12 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
     }).join("");
     var more=x.pains.length>3?'<button class="morebtn" data-act="more"><i class="ti ti-chevron-down" aria-hidden="true"></i><span>Show all '+x.pains.length+' pain points</span></button>':'';
     var apac=APAC[x.id]?'<div class="sec"><h4><i class="ti ti-map-pin" aria-hidden="true"></i>APAC accounts to target</h4>'+apacChips(APAC[x.id])+'</div>':'';
-    var hacks=x.hacks&&x.hacks.length?'<div class="sec"><h4><i class="ti ti-alert-hexagon" aria-hidden="true"></i>Segment-matched hacks</h4><div class="chips">'+x.hacks.map(function(h){return '<span class="chip hack">'+esc(h)+'</span>';}).join("")+'</div></div>':'';
+    var hacks="";
+    if(x.hacks&&x.hacks.length){
+      var hcats=x.hacks.map(function(k){return HACKS[k]?HACKS[k].cat:"exploit";});
+      var hh=hcats.indexOf("exploit")>=0?["ti-alert-hexagon","Segment-matched incidents"]:(hcats.indexOf("rwa")>=0?["ti-building-bank","Tokenization signals"]:["ti-shield-check","Proof point"]);
+      hacks='<div class="sec"><h4><i class="ti '+hh[0]+'" aria-hidden="true"></i>'+hh[1]+'</h4><div class="chips">'+x.hacks.map(function(k){var h=HACKS[k];if(!h)return "";var cls=h.cat==="save"?"chip save tap":(h.cat==="rwa"?"chip rwa tap":"chip hack tap");return '<button class="'+cls+'" data-hack="'+k+'">'+esc(h.label)+(h.amount?" · "+esc(h.amount):"")+' <i class="ti ti-chevron-right" aria-hidden="true"></i></button>';}).join("")+'</div></div>';
+    }
     var study=facedown?'<div class="studyrow"><button class="btn ghost" data-act="again"><i class="ti ti-rotate" aria-hidden="true"></i> Review again</button><button class="btn good" data-act="got"><i class="ti ti-check" aria-hidden="true"></i> Got it</button></div>':'';
     return '<article class="card'+(facedown?' facedown':'')+'" data-id="'+x.id+'">'+
       '<div class="chead">'+
@@ -642,6 +739,8 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
     var cardEl=e.target.closest(".card");
     if(!cardEl)return;
     var idx=cardEls.indexOf(cardEl);
+    var hkEl=e.target.closest("[data-hack]");
+    if(hkEl){openHack(hkEl.getAttribute("data-hack"));return;}
     var actEl=e.target.closest("[data-act]");
     if(actEl){
       var a=actEl.getAttribute("data-act"),x=byId[cardEl.getAttribute("data-id")];
@@ -703,6 +802,31 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
   window.addEventListener("resize",function(){
     clearTimeout(rs);rs=setTimeout(function(){scrollToCard(state.active,true);},120);
   });
+
+  function openHack(key){
+    var h=HACKS[key]; if(!h)return;
+    var sheet=document.getElementById("icpSheet");
+    var accent=h.cat==="save"?"var(--color-text-success)":(h.cat==="rwa"?"var(--color-text-info)":"var(--color-text-danger)");
+    var bg=h.cat==="save"?"var(--color-background-success)":(h.cat==="rwa"?"var(--color-background-info)":"var(--color-background-danger)");
+    var icon=h.cat==="save"?"ti-shield-check":(h.cat==="rwa"?"ti-building-bank":"ti-alert-hexagon");
+    var catLabel=h.cat==="save"?"Save story":(h.cat==="rwa"?"Tokenization signal":"Exploit");
+    var meta=[];if(h.amount)meta.push(h.amount);if(h.date)meta.push(h.date);meta.push(catLabel);
+    var secs=[["Who they are",h.who],["Based",h.based],["What happened",h.what],["Why it matters",h.angle]];
+    sheet.innerHTML='<div class="sheet-scrim" data-close></div>'+
+      '<div class="sheet" role="dialog" aria-modal="true" aria-label="'+esc(h.label)+'">'+
+      '<button class="sheet-close" data-close aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>'+
+      '<div class="sheet-head"><span class="sheet-icon" style="background:'+bg+';color:'+accent+'"><i class="ti '+icon+'" aria-hidden="true"></i></span>'+
+      '<div><h3 class="sheet-title">'+esc(h.label)+'</h3><div class="sheet-meta">'+meta.map(function(m){return "<span>"+esc(m)+"</span>";}).join("")+'</div></div></div>'+
+      '<div class="sheet-body">'+secs.map(function(s,i){return '<div class="sheet-sec'+(i===3?" accent":"")+'"'+(i===3?' style="--ac:'+accent+'"':"")+'><h4>'+s[0]+'</h4><p>'+esc(s[1])+'</p></div>';}).join("")+'</div></div>';
+    sheet.classList.add("open");sheet.setAttribute("aria-hidden","false");
+    var cb=sheet.querySelector(".sheet-close");if(cb)cb.focus();
+  }
+  function closeHack(){var sheet=document.getElementById("icpSheet");sheet.classList.remove("open");sheet.setAttribute("aria-hidden","true");}
+  (function(){
+    var sheet=document.getElementById("icpSheet");
+    sheet.addEventListener("click",function(e){if(e.target.closest("[data-close]"))closeHack();});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")closeHack();});
+  })();
 
   var m=lsGet("mode");if(m==="cards"||m==="browse")state.mode=m;
   var f=lsGet("filter");if(f&&(f==="all"||SEG[f]))state.filter=f;
