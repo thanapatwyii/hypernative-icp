@@ -118,6 +118,13 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
 .chips{display:flex;flex-wrap:wrap;gap:6px;}
 .chip{font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--color-background-secondary);display:inline-flex;align-items:center;gap:6px;}
 .chip .rg{font-size:10px;padding:1px 6px;border-radius:999px;background:var(--color-background-primary);color:var(--color-text-tertiary);box-shadow:inset 0 0 0 0.5px var(--color-border-tertiary);}
+a.chip{text-decoration:none;color:inherit;transition:box-shadow .15s;}
+a.chip.linkable:hover{box-shadow:inset 0 0 0 1px var(--color-border-secondary);}
+.chip.linkable i{font-size:11px;opacity:.5;}
+.verified{font-size:12px;color:var(--color-text-tertiary);margin:-8px 4px 20px;display:flex;align-items:center;gap:6px;}
+.verified i{font-size:14px;color:var(--color-text-success);}
+.sheet-src{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-size:12.5px;font-weight:500;text-decoration:none;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:9px 15px;border-radius:999px;}
+.sheet-src i{font-size:15px;}
 .chip.hack{background:var(--color-background-danger);color:var(--color-text-danger);}
 .chip.hit{background:var(--color-background-success);color:var(--color-text-success);}
 button.chip{font:inherit;border:0;cursor:pointer;transition:transform .12s;}
@@ -183,6 +190,7 @@ button.chip:active{transform:scale(.96);}
   <header class="page-head">
     <h1>Hypernative ICP study</h1>
     <p>15 target segments across 5 verticals, with APAC accounts to target. Swipe through the deck, or shuffle it in Card mode. Built from the Hypernative ICP knowledge base and BDR playbook.</p>
+    <p class="verified"><i class="ti ti-circle-check" aria-hidden="true"></i> Content verified <span id="icpVerified"></span> · triggers &amp; incidents are time-sensitive — re-check before quoting.</p>
   </header>
 
   <h2 class="icp-sr">Interactive study of Hypernative's 15 ideal-customer segments with APAC target accounts. Swipe the horizontal card deck or use the arrows; search or filter by vertical; Card mode shuffles the deck into flashcards with got-it / review-again scoring.</h2>
@@ -532,7 +540,8 @@ button.chip:active{transform:scale(.96);}
     return '<div class="chips">'+arr.map(function(s){
       var p=s.split(" — ");var rg=p[1]?'<span class="rg">'+esc(p[1])+'</span>':'';
       var hit=state.q&&s.toLowerCase().indexOf(state.q)>=0?" hit":"";
-      return '<span class="chip'+hit+'">'+esc(p[0])+rg+'</span>';
+      var url="https://www.google.com/search?q="+encodeURIComponent(p[0]+" crypto");
+      return '<a class="chip linkable'+hit+'" href="'+url+'" target="_blank" rel="noopener" title="Look up '+esc(p[0])+'">'+esc(p[0])+rg+' <i class="ti ti-external-link" aria-hidden="true"></i></a>';
     }).join("")+'</div>';
   }
 
@@ -751,6 +760,7 @@ button.chip:active{transform:scale(.96);}
     var cardEl=e.target.closest(".card");
     if(!cardEl)return;
     var idx=cardEls.indexOf(cardEl);
+    if(e.target.closest("a[href]"))return;
     var hkEl=e.target.closest("[data-hack]");
     if(hkEl){openHack(hkEl.getAttribute("data-hack"));return;}
     var actEl=e.target.closest("[data-act]");
@@ -829,7 +839,9 @@ button.chip:active{transform:scale(.96);}
       '<button class="sheet-close" data-close aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>'+
       '<div class="sheet-head"><span class="sheet-icon" style="background:'+bg+';color:'+accent+'"><i class="ti '+icon+'" aria-hidden="true"></i></span>'+
       '<div><h3 class="sheet-title">'+esc(h.label)+'</h3><div class="sheet-meta">'+meta.map(function(m){return "<span>"+esc(m)+"</span>";}).join("")+'</div></div></div>'+
-      '<div class="sheet-body">'+secs.map(function(s,i){return '<div class="sheet-sec'+(i===3?" accent":"")+'"'+(i===3?' style="--ac:'+accent+'"':"")+'><h4>'+s[0]+'</h4><p>'+esc(s[1])+'</p></div>';}).join("")+'</div></div>';
+      '<div class="sheet-body">'+secs.map(function(s,i){return '<div class="sheet-sec'+(i===3?" accent":"")+'"'+(i===3?' style="--ac:'+accent+'"':"")+'><h4>'+s[0]+'</h4><p>'+esc(s[1])+'</p></div>';}).join("")+
+      '<a class="sheet-src" href="https://www.google.com/search?q='+encodeURIComponent(h.label+(h.cat==="exploit"?" crypto hack":" crypto"))+'" target="_blank" rel="noopener"><i class="ti ti-external-link" aria-hidden="true"></i> '+(h.cat==="exploit"?"Search this incident":"Look it up")+'</a>'+
+      '</div></div>';
     sheet.classList.add("open");sheet.setAttribute("aria-hidden","false");
     var cb=sheet.querySelector(".sheet-close");if(cb)cb.focus();
   }
@@ -840,6 +852,8 @@ button.chip:active{transform:scale(.96);}
     document.addEventListener("keydown",function(e){if(e.key==="Escape")closeHack();});
   })();
 
+  var VERIFIED="13 Jun 2026";
+  (function(){var ve=document.getElementById("icpVerified");if(ve)ve.textContent=VERIFIED;})();
   var m=lsGet("mode");if(m==="cards"||m==="browse")state.mode=m;
   var f=lsGet("filter");if(f&&(f==="all"||SEG[f]))state.filter=f;
   renderModes();renderFilter();renderCarousel();

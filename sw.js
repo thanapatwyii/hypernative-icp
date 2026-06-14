@@ -1,4 +1,4 @@
-var VERSION = "icp-v5";
+var VERSION = "icp-v6";
 
 self.addEventListener("install", function () {
   self.skipWaiting();
