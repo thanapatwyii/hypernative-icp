@@ -67,7 +67,19 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
 .filters::-webkit-scrollbar{display:none;}
 .fpill{white-space:nowrap;font:inherit;font-size:12.5px;padding:8px 14px;border-radius:999px;border:0;background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:var(--shadow-soft);transition:box-shadow .2s,color .2s;}
 .fpill[aria-pressed="true"]{color:var(--color-text-primary);font-weight:600;box-shadow:var(--shadow-pill);}
-.fdot{width:8px;height:8px;border-radius:50%;flex:none;}
+.fdot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--seg,var(--color-text-tertiary));}
+.seg-defi{--seg:#534AB7;--segbg:#EEEDFE;}
+.seg-cefi{--seg:#185FA5;--segbg:#E6F1FB;}
+.seg-inst{--seg:#0F6E56;--segbg:#E1F5EE;}
+.seg-infra{--seg:#8A560C;--segbg:#FAEEDA;}
+.seg-wallets{--seg:#993556;--segbg:#FBEAF0;}
+@media (prefers-color-scheme: dark){
+.seg-defi{--seg:#BBB4F2;--segbg:#7F77DD30;}
+.seg-cefi{--seg:#85B7EB;--segbg:#378ADD30;}
+.seg-inst{--seg:#5DCAA5;--segbg:#1D9E7530;}
+.seg-infra{--seg:#EFB24A;--segbg:#E0951F30;}
+.seg-wallets{--seg:#ED93B1;--segbg:#D4537E30;}
+}
 .fct{font-size:11px;color:var(--color-text-tertiary);}
 
 .deckbar{display:flex;align-items:center;gap:12px;margin:2px 2px 6px;}
@@ -88,7 +100,7 @@ body{margin:0;background:var(--color-background-tertiary);color:var(--color-text
 .card.active{transform:scale(1);opacity:1;}
 .card.studied::after{content:"✓";position:absolute;top:16px;right:16px;width:26px;height:26px;border-radius:50%;background:var(--color-background-success);color:var(--color-text-success);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;}
 .chead{display:flex;gap:14px;align-items:center;}
-.tile{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;}
+.tile{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;background:var(--segbg,var(--color-background-secondary));color:var(--seg,var(--color-text-primary));}
 .cname{font-size:18px;font-weight:600;margin:0;line-height:1.25;letter-spacing:-0.01em;}
 .ctag{font-size:13px;color:var(--color-text-secondary);margin:3px 0 0;}
 .badges{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 16px;}
@@ -136,7 +148,7 @@ button.chip:active{transform:scale(.96);}
 .pain:last-of-type{border-bottom:0;}
 .pain.extra{display:none;}
 .card.expanded .pain.extra{display:flex;}
-.ptile{width:38px;height:38px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;font-size:18px;margin-top:2px;}
+.ptile{width:38px;height:38px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;font-size:18px;margin-top:2px;background:var(--segbg,var(--color-background-secondary));color:var(--seg,var(--color-text-primary));}
 .pp{font-size:13.5px;font-weight:600;margin:0;line-height:1.4;}
 .ps{font-size:12.5px;color:var(--color-text-secondary);margin:2px 0 0;}
 .ptags{display:inline-flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
@@ -530,7 +542,7 @@ button.chip:active{transform:scale(.96);}
     var pains=x.pains.map(function(pn,j){
       var icon=PICON[pn.prod[0]]||"ti-point";
       return '<div class="pain'+(j>=3?' extra':'')+'">'+
-        '<div class="ptile" style="background:'+tint(col)+';color:'+col+'"><i class="ti '+icon+'" aria-hidden="true"></i></div>'+
+        '<div class="ptile seg-'+x.seg+'"><i class="ti '+icon+'" aria-hidden="true"></i></div>'+
         '<div><p class="pp">'+esc(pn.p)+'</p><p class="ps">'+esc(pn.s)+'</p>'+prodTags(pn.prod)+'</div>'+
       '</div>';
     }).join("");
@@ -545,11 +557,11 @@ button.chip:active{transform:scale(.96);}
     var study=facedown?'<div class="studyrow"><button class="btn ghost" data-act="again"><i class="ti ti-rotate" aria-hidden="true"></i> Review again</button><button class="btn good" data-act="got"><i class="ti ti-check" aria-hidden="true"></i> Got it</button></div>':'';
     return '<article class="card'+(facedown?' facedown':'')+'" data-id="'+x.id+'">'+
       '<div class="chead">'+
-        '<div class="tile" style="background:'+tint(col)+';color:'+col+'"><i class="ti '+x.icon+'" aria-hidden="true"></i></div>'+
+        '<div class="tile seg-'+x.seg+'"><i class="ti '+x.icon+'" aria-hidden="true"></i></div>'+
         '<div><h3 class="cname">'+esc(x.name)+'</h3><p class="ctag">'+esc(x.tagline)+'</p></div>'+
       '</div>'+
       '<div class="badges">'+
-        '<span class="bseg"><span class="fdot" style="background:'+col+'"></span>'+esc(SEG[x.seg].name)+'</span>'+
+        '<span class="bseg"><span class="fdot seg-'+x.seg+'"></span>'+esc(SEG[x.seg].name)+'</span>'+
         '<span class="btier" style="background:var('+t.bg+');color:var('+t.fg+')"><i class="ti '+t.icon+'" aria-hidden="true"></i>'+t.label+'</span>'+
       '</div>'+
       '<div class="stats">'+
@@ -598,7 +610,7 @@ button.chip:active{transform:scale(.96);}
     var el=document.getElementById("icpFilter");
     el.innerHTML=FILTERS.map(function(f){
       var n=f.key==="all"?ICPS.length:ICPS.filter(function(x){return x.seg===f.key;}).length;
-      var dot=f.key==="all"?'':'<span class="fdot" style="background:'+SEG[f.key].color+'"></span>';
+      var dot=f.key==="all"?'':'<span class="fdot seg-'+f.key+'"></span>';
       return '<button class="fpill" data-f="'+f.key+'" aria-pressed="'+(state.filter===f.key)+'">'+dot+esc(f.name)+'<span class="fct">'+n+'</span></button>';
     }).join("");
     Array.prototype.forEach.call(el.querySelectorAll(".fpill"),function(b){
